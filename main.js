@@ -115,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(`\nHorarios disponibles restantes: ${horasDisponiblesPorDia}\n`);
 
             this.mostrarGrillaPorDeporte(deporte);
-            this.mostrarGrillaConsolidada();
         },
 
         reiniciarSimulador: function () {
@@ -141,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             this.mostrarMensaje(mensaje, 'mensaje-deporte');
         },
-
         
         simulador: function () {
             this.reiniciarSimulador();
