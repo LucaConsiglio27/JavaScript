@@ -185,18 +185,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Metodo para mostrar mensajes de error en la interfaz de usuario
         mostrarError: function (mensaje) {
-            const errorElement = document.createElement('div');
-            errorElement.textContent = mensaje;
-            errorElement.classList.add('mensaje-error');
-            appElement.appendChild(errorElement);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: mensaje
+            });
         },
 
         // Metodo para mostrar mensajes en la interfaz de usuario
         mostrarMensaje: function (mensaje, claseCSS) {
-            const mensajeElement = document.createElement('div');
-            mensajeElement.textContent = mensaje;
-            mensajeElement.classList.add(claseCSS);
-            appElement.appendChild(mensajeElement);
+            Swal.fire({
+                text: mensaje,
+                customClass: {
+                    container: claseCSS
+                }
+            });
         },
 
         // Metodo para mostrar los horarios disponibles para un dia especifico en la interfaz de usuario
@@ -217,6 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Crear un mensaje con los horarios disponibles y mostrarlo en la interfaz
             const mensaje = `Horarios disponibles para ${deporte} el ${dia}: ${horariosDisponibles.join(', ')}`;
             this.mostrarMensaje(mensaje, 'mensaje-disponible');
+            
         }
     };
 
