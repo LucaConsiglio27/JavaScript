@@ -3,6 +3,7 @@ body {
     margin: 20px;
 }
 h1{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
     width: 100%;
     font-weight: lighter;
     text-align: center;
@@ -19,9 +20,12 @@ h2{
     border: 1px solid #ccc;
     padding: 15px;
     margin-bottom: 20px;
+    box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.75);
 }
 
-button {
+button{
     padding: 8px 12px;
     background-color: #4CAF50;
     color: white;
@@ -30,6 +34,7 @@ button {
     cursor: pointer;
 }
 
+
 .mensaje-deporte {
     background-color: blue;
     padding: 10px;
@@ -37,3 +42,4 @@ button {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+

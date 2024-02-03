@@ -179,16 +179,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Metodo para mostrar la grilla de horarios para un deporte especifico
         mostrarGrillaPorDeporte: function (deporte) {
-            let mensaje = `${deporte.charAt(0).toUpperCase() + deporte.slice(1)}:\n`;
+            let mensaje = `<h2>${deporte.charAt(0).toUpperCase() + deporte.slice(1)}:</h2><div style="text-align: left;">`;
             for (const dia of DIAS_SEMANA) {
-                mensaje += `${dia}:\n`;
-                deportes[deporte].horarios
+                mensaje += `<h3>${dia}:</h3>`;
+                const horariosDia = deportes[deporte].horarios
                     .filter(evento => evento.dia === dia)
-                    .forEach(evento => {
-                        mensaje += `  ${evento.hora}:00\n`;
-                    });
+                    .map(evento => `${evento.hora}:00`)
+                    .join(' ');
+                mensaje += `<p>${horariosDia}</p>`;
             }
-            this.mostrarMensaje(mensaje, 'mensaje-deporte');
+            mensaje += `</div>`;
+
+            Swal.fire({
+                html: mensaje,
+                customClass: {
+                    container: 'mensaje-deporte'
+                }
+            });
         },
 
         // Metodo principal para iniciar el simulador
@@ -240,7 +247,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // Crear un mensaje con los horarios disponibles y mostrarlo en la interfaz
             const mensaje = `Horarios disponibles para ${deporte} el ${dia}: ${horariosDisponibles.join(', ')}`;
             this.mostrarMensaje(mensaje, 'mensaje-disponible');
-
         }
     };
 
