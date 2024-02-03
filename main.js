@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Definir constantes para el horario de inicio y fin, y las horas disponibles por dia
     const HORARIO_INICIO = 6;
     const HORARIO_FIN = 23;
-    let horasDisponiblesPorDia = 17;
+    const HORAS_DISPONIBLES_POR_DIA = 18; 
     // Definir un arreglo con los dias de la semana
     const DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
 
@@ -17,14 +17,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Objeto que maneja la interfaz de usuario
     const interfazDeUsuario = {
-        // Metodo para mostrar el formulario de entrada para un deporte específico
+        // Metodo para mostrar el formulario de entrada para un deporte especifico
         mostrarFormulario: function (deporte) {
             // Crear el HTML del formulario
             const formularioHTML = `
             <div class="card" id="${deporte}">
-                <h2>${deporte}</h2>
+                <h2 class="animate__animated animate__flash">${deporte}</h2>
                 <label for="${deporte}_horasPorDia">Horas por Día:</label>
-                <input type="number" id="${deporte}_horasPorDia" min="1" max="${horasDisponiblesPorDia}" required>
+                <input type="number" id="${deporte}_horasPorDia" min="1" max="${HORAS_DISPONIBLES_POR_DIA}" required>
                 
                 ${this.crearInputsHorarios(deporte)}
             
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             appElement.insertAdjacentHTML('beforeend', formularioHTML);
         },
 
-        // Metodo para crear los inputs de horarios para un deporte específico
+        // Metodo para crear los inputs de horarios para un deporte especifico
         crearInputsHorarios: function (deporte) {
             let inputsHTML = '';
 
@@ -118,9 +118,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     .filter(evento => evento.dia === dia)
                     .map(evento => evento.hora);
 
+                // Obtener la hora de inicio para este dia
+                const horaInicioDia = horariosPorDia[dia];
+
                 // Iterar sobre las horas disponibles para asignar horarios
                 for (let i = 0; i < horasPorDia; i++) {
-                    const hora = HORARIO_INICIO + i;
+                    const hora = horaInicioDia + i;
 
                     // Verificar si la hora esta disponible para asignar
                     if (!horariosAsignadosDia.includes(hora)) {
@@ -135,26 +138,43 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Actualizar las horas disponibles y el almacenamiento local
-            horasDisponiblesPorDia -= horasPorDia;
             localStorage.setItem('deportes', JSON.stringify(deportes));
-            localStorage.setItem('horasDisponiblesPorDia', horasDisponiblesPorDia);
-            console.log(`\nHorarios disponibles restantes: ${horasDisponiblesPorDia}\n`);
+            console.log(`\nHorarios asignados correctamente.\n`);
+
+            // Actualizar los datos en jsonplaceholder
+            this.actualizarDatosJsonPlaceholder(deportes);
 
             // Mostrar la grilla de horarios actualizada
             this.mostrarGrillaPorDeporte(deporte);
         },
 
+        // Metodo para actualizar los datos en jsonplaceholder
+        actualizarDatosJsonPlaceholder: function (deportes) {
+            fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                body: JSON.stringify(deportes),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+        },
+
         // Metodo para reiniciar el simulador
         reiniciarSimulador: function () {
-            // Restablecer las horas disponibles por dia y reiniciar los horarios asignados para cada deporte
-            horasDisponiblesPorDia = 17;
+            // Restablecer los horarios asignados para cada deporte
             for (const deporte in deportes) {
                 deportes[deporte].horarios = [];
             }
 
             // Actualizar el almacenamiento local
             localStorage.setItem('deportes', JSON.stringify(deportes));
-            localStorage.setItem('horasDisponiblesPorDia', horasDisponiblesPorDia);
+            console.log(`\nSimulador reiniciado.\n`);
+
+            // Actualizar los datos en jsonplaceholder
+            this.actualizarDatosJsonPlaceholder(deportes);
         },
 
         // Metodo para mostrar la grilla de horarios para un deporte especifico
@@ -170,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             this.mostrarMensaje(mensaje, 'mensaje-deporte');
         },
-        
+
         // Metodo principal para iniciar el simulador
         simulador: function () {
             // Reiniciar el simulador
@@ -220,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Crear un mensaje con los horarios disponibles y mostrarlo en la interfaz
             const mensaje = `Horarios disponibles para ${deporte} el ${dia}: ${horariosDisponibles.join(', ')}`;
             this.mostrarMensaje(mensaje, 'mensaje-disponible');
-            
+
         }
     };
 

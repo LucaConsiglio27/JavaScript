@@ -3,10 +3,16 @@ body {
     margin: 20px;
 }
 h1{
+    width: 100%;
+    font-weight: lighter;
+    text-align: center;
     color: blue;
 }
 
 h2{
+    font-weight: lighter;
+    text-align: left;
+    color: blue;
     color: blue;
 }
 .card {
