@@ -18,23 +18,26 @@ document.addEventListener('DOMContentLoaded', function () {
     // Objeto que maneja la interfaz de usuario
     const interfazDeUsuario = {
         // Metodo para mostrar el formulario de entrada para un deporte especifico
-        mostrarFormulario: function (deporte) {
-            // Crear el HTML del formulario
-            const formularioHTML = `
-            <div class="card" id="${deporte}">
-                <h2 class="animate__animated animate__flash">${deporte}</h2>
-                <label for="${deporte}_horasPorDia">Horas por Día:</label>
-                <input type="number" id="${deporte}_horasPorDia" min="1" max="${HORAS_DISPONIBLES_POR_DIA}" required>
-                
-                ${this.crearInputsHorarios(deporte)}
-            
-                <button class="guardar-btn">Guardar</button>
-            </div>
-        `;
+mostrarFormulario: function (deporte) {
+    // Capitalizar la primera letra del deporte
+    const deporteCapitalizado = deporte.charAt(0).toUpperCase() + deporte.slice(1);
 
-            // Insertar el formulario en el DOM
-            appElement.insertAdjacentHTML('beforeend', formularioHTML);
-        },
+    // Crear el HTML del formulario con el deporte capitalizado
+    const formularioHTML = `
+    <div class="card" id="${deporte}">
+        <h2 class="animate__animated animate__flash">${deporteCapitalizado}</h2>
+        <label for="${deporte}_horasPorDia">Horas por Día:</label>
+        <input type="number" id="${deporte}_horasPorDia" min="1" max="${HORAS_DISPONIBLES_POR_DIA}" required>
+        
+        ${this.crearInputsHorarios(deporte)}
+    
+        <button class="guardar-btn">Guardar</button>
+    </div>
+    `;
+
+    // Insertar el formulario en el DOM
+    appElement.insertAdjacentHTML('beforeend', formularioHTML);
+},
 
         // Metodo para crear los inputs de horarios para un deporte especifico
         crearInputsHorarios: function (deporte) {
