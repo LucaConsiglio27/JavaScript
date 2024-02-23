@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Obtener el elemento contenedor de la aplicación
+    // Obtener el elemento contenedor de la aplicacion
     const appElement = document.getElementById('app');
     // Definir constantes para el horario de inicio y fin, y las horas disponibles por dia
     const HORARIO_INICIO = 6;
@@ -18,26 +18,26 @@ document.addEventListener('DOMContentLoaded', function () {
     // Objeto que maneja la interfaz de usuario
     const interfazDeUsuario = {
         // Metodo para mostrar el formulario de entrada para un deporte especifico
-mostrarFormulario: function (deporte) {
-    // Capitalizar la primera letra del deporte
-    const deporteCapitalizado = deporte.charAt(0).toUpperCase() + deporte.slice(1);
+        mostrarFormulario: function (deporte) {
+            // Capitalizar la primera letra del deporte
+            const deporteCapitalizado = deporte.charAt(0).toUpperCase() + deporte.slice(1);
 
-    // Crear el HTML del formulario con el deporte capitalizado
-    const formularioHTML = `
-    <div class="card" id="${deporte}">
-        <h2 class="animate__animated animate__flash">${deporteCapitalizado}</h2>
-        <label for="${deporte}_horasPorDia">Horas por Día:</label>
-        <input type="number" id="${deporte}_horasPorDia" min="1" max="${HORAS_DISPONIBLES_POR_DIA}" required>
-        
-        ${this.crearInputsHorarios(deporte)}
-    
-        <button class="guardar-btn">Guardar</button>
-    </div>
-    `;
+            // Crear el HTML del formulario con el deporte capitalizado
+            const formularioHTML = `
+            <div class="card" id="${deporte}">
+                <h2 class="animate__animated animate__flash">${deporteCapitalizado}</h2>
+                <label for="${deporte}_horasPorDia">Horas por Día:</label>
+                <input type="number" id="${deporte}_horasPorDia" min="1" max="${HORAS_DISPONIBLES_POR_DIA}" required>
+                
+                ${this.crearInputsHorarios(deporte)}
+            
+                <button class="guardar-btn">Guardar</button>
+            </div>
+            `;
 
-    // Insertar el formulario en el DOM
-    appElement.insertAdjacentHTML('beforeend', formularioHTML);
-},
+            // Insertar el formulario en el DOM
+            appElement.insertAdjacentHTML('beforeend', formularioHTML);
+        },
 
         // Metodo para crear los inputs de horarios para un deporte especifico
         crearInputsHorarios: function (deporte) {
@@ -66,7 +66,7 @@ mostrarFormulario: function (deporte) {
         }
     };
 
-    // Objeto que simula el proceso de captura de entrada y asignacion de horarios
+    // Objeto que simula el proceso de captura de entrada y asignación de horarios
     const simulador = {
         // Metodo para capturar la entrada del usuario y asignar horarios
         capturarEntrada: function (deporte) {
@@ -131,7 +131,11 @@ mostrarFormulario: function (deporte) {
                     // Verificar si la hora esta disponible para asignar
                     if (!horariosAsignadosDia.includes(hora)) {
                         deportes[deporte].horarios.push({ dia, hora });
-                        console.log(`  ${dia} a las ${hora}:00 asignado`);
+                        Swal.fire({
+                            title: 'Horario Asignado',
+                            text: `${dia} a las ${hora}:00 asignado`,
+                            icon: 'success'
+                        });
                     } else {
                         this.mostrarError(`La hora ${hora}:00 del ${dia} ya está ocupada.`);
                         this.mostrarHorariosDisponibles(deporte, dia);
@@ -142,7 +146,11 @@ mostrarFormulario: function (deporte) {
 
             // Actualizar las horas disponibles y el almacenamiento local
             localStorage.setItem('deportes', JSON.stringify(deportes));
-            console.log(`\nHorarios asignados correctamente.\n`);
+            Swal.fire({
+                title: 'Horarios Asignados',
+                text: 'Horarios asignados correctamente.',
+                icon: 'success'
+            });
 
             // Actualizar los datos en jsonplaceholder
             this.actualizarDatosJsonPlaceholder(deportes);
@@ -151,7 +159,7 @@ mostrarFormulario: function (deporte) {
             this.mostrarGrillaPorDeporte(deporte);
         },
 
-        // Metodo para actualizar los datos en jsonplaceholder
+        // Método para actualizar los datos en jsonplaceholder
         actualizarDatosJsonPlaceholder: function (deportes) {
             fetch('https://jsonplaceholder.typicode.com/posts', {
                 method: 'POST',
@@ -174,7 +182,11 @@ mostrarFormulario: function (deporte) {
 
             // Actualizar el almacenamiento local
             localStorage.setItem('deportes', JSON.stringify(deportes));
-            console.log(`\nSimulador reiniciado.\n`);
+            Swal.fire({
+                title: 'Simulador Reiniciado',
+                text: 'Simulador reiniciado correctamente.',
+                icon: 'info'
+            });
 
             // Actualizar los datos en jsonplaceholder
             this.actualizarDatosJsonPlaceholder(deportes);
@@ -222,16 +234,6 @@ mostrarFormulario: function (deporte) {
             });
         },
 
-        // Metodo para mostrar mensajes en la interfaz de usuario
-        mostrarMensaje: function (mensaje, claseCSS) {
-            Swal.fire({
-                text: mensaje,
-                customClass: {
-                    container: claseCSS
-                }
-            });
-        },
-
         // Metodo para mostrar los horarios disponibles para un dia especifico en la interfaz de usuario
         mostrarHorariosDisponibles: function (deporte, dia) {
             // Obtener los horarios asignados para el dia especifico
@@ -239,7 +241,7 @@ mostrarFormulario: function (deporte) {
                 .filter(evento => evento.dia === dia)
                 .map(evento => evento.hora);
 
-            // Obtener los horarios disponibles para el dia especifico
+            // Obtener los horarios disponibles para el dia específico
             const horariosDisponibles = [];
             for (let hora = HORARIO_INICIO; hora <= HORARIO_FIN; hora++) {
                 if (!horariosAsignadosDia.includes(hora)) {
@@ -249,11 +251,16 @@ mostrarFormulario: function (deporte) {
 
             // Crear un mensaje con los horarios disponibles y mostrarlo en la interfaz
             const mensaje = `Horarios disponibles para ${deporte} el ${dia}: ${horariosDisponibles.join(', ')}`;
-            this.mostrarMensaje(mensaje, 'mensaje-disponible');
+            Swal.fire({
+                text: mensaje,
+                customClass: {
+                    container: 'mensaje-disponible'
+                }
+            });
         }
     };
 
-    // Agregar un evento click al contenedor de la aplicacion para capturar la entrada del usuario al hacer clic en el boton de guardar
+    // Agregar un evento click al contenedor de la aplicación para capturar la entrada del usuario al hacer clic en el botón de guardar
     appElement.addEventListener('click', function (event) {
         const target = event.target;
         if (target.classList.contains('guardar-btn')) {
